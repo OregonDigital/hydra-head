@@ -1,0 +1,268 @@
+h3. 6.4.0 (2013-09-30)
+* Patch Hydra::AccessControlsEnforcement#escape_filter to support
+  group/role names containing colons. [David Chandek-Stark]
+* Fixed Solr field name [David Chandek-Stark]
+* Amended Hydra::User#groups to pass self to RoleMapper.roles in order to avoid
+  redundant user lookup. Fixes #111. [David Chandek-Stark]
+* Moved controller mixins into concerns [Justin Coyne]
+* Added #permissions= as deprecated to maintain backward compatibility
+  of Hydra::AdminPolicy with hydra-head < 6.4. (In hydra-head < 6.4
+  Hydra::AdminPolicy included Hydra::ModelMixins::RightsMetadata, which provided
+  #permissions=.) [David Chandek-Stark]
+* Removed deprecated modules from ModsAsset [Justin Coyne]
+* Removed RedCloth dependency [Justin Coyne]
+* Some of the delegated methods weren't pointing at their intended
+  target [Justin Coyne]
+* Pin to active-fedora >= 6.6.0.rc1 and refactor usage of delegate to
+  avoid deprecation warnings [Justin Coyne]
+* Update rail [Justin Coyne]
+* Hydra::PolicyAwareAbility#policy_pid_for modified to handle
+  multiple objects having different policies (Fixes #101). Implemented pending
+  tests for Hydra::PolicyAwareAbility#test_read_from_policy and
+  #test_read_from_policy. [David Chandek-Stark]
+* Deprecate Hydra::ModelMixins::SolrDocumentExtension [Justin Coyne]
+* Deprecate Hydra::ModelMixins::CommonMetadata [Justin Coyne]
+* Remove duplicate code [Justin Coyne]
+* Remove lib/hydra.rb so that the hydra gem can load normally [Justin Coyne]
+* Substituted double for the now deprecated mock() and stub() [Justin Coyne]
+* Adds #asset_param_key method to DownloadBehavior to support overriding 
+  the default params key (:id) for the asset PID. [David Chandek-Stark]
+* Added the derived property visibility, from sufia [Justin Coyne]
+* Added nested attributes for permissions [Justin Coyne]
+* PolicyAwareAbility should include Ability so you don't have to [Justin Coyne]
+* All policies should be applied to gated discovery when more than 10 
+  are applicable [Chris Colvar]
+* Deprecated Hydra::ModelMixins::RightsMetadata [Justin Coyne]
+
+h3. 6.3.4 (2013-08-27)
+* Default ability shouldn't have policy methods [Justin Coyne]
+* Escape spaces in group names in solr query conditions [Chris Colvard]
+* Deprecating and removing calls to .is_puublic? [Adam Wead]
+* Issue 78: Adding blank custom_permissions method with comments [Adam Wead]
+* Updating README [Adam Wead]
+* Add an ability.rb file when running the generator [Adam Wead]
+
+
+h3. 6.3.3 (2013-08-16)
+* Fix serialization of empty permissions lists [Michael Klein]
+
+h3. 6.3.2 (2013-07-22)
+* render_selected_facet_value should make use of Blacklight's facet_display_value method [Justin Coyne]
+* added contribution guidelines [Jeremey Friesen]
+
+h3. 6.3.1 (2013-07-04)
+* Run 'bundle install' after adding gems to the gemfile [Justin Coyne]
+* Update README.textile [Matt Zumwalt]
+* Add version badge to the Readme [Justin Coyne]
+* Removed test that did not actually test any hydra code [Justin Coyne]
+
+h3. 6.3.0 (2013-07-01) 
+* Use Om in a way that is compatible with 3.0.1 [Justin Coyne]
+* Rails 4 support [Justin Coyne]
+
+h3. 6.2.2 (2013-06-14)
+* Rights metadata should only update the user you tell it to update. [Justin Coyne]
+
+h3. 6.2.1 (2013-06-14)
+* Removed commented out line that was changed in commit bd53011b3f1fd2f20703b703db67385e100e67d6. [David Chandek-Stark]
+* Adding CONTRIBUTORS.md [Jeremy Friesen]
+* Patched Hydra::PolicyAwareAccessControlsEnforcement to properly handle anonymous users by amending #policies_with_access (previously returned empty list when current_user is nil) and #apply_policy_individual_permissions. [David Chandek-Stark]
+* Change the version of hydra-head in the readme [Justin Coyne]
+* Updating hydra generator for rspec [Jeremy Friesen]
+* Removing trailing whitespace from generators [Jeremy Friesen]
+* Update CONTRIBUTING.md [Justin Coyne]
+
+
+h3. 6.2.0 (2013-05-23)
+* Fix mismatched arguments in DownloadBehavior
+* Allow discovery_permissions to be set in AccessControlsEnforcement
+* Fix solr name for the embargo release date
+
+h3. 6.1.1 (2013-05-09)
+* Correct typo in CatalogController template
+* Fix bug where default_content_ds, was not being checked in DownloadController
+* BlacklightHelperBehavior#document_partial_name should work on single values fields
+* BlacklightHelperBehavior#document_partial_name should replace periods in partial name
+* Use AF::Base.load_instance_from_solr in the DownloadController
+* DownloadController raises an error if no datastream can be loaded
+* Solrizer 3.1.0 compatible tests
+
+h3. 6.1.0 (2013-04-29)
+* Fixed Solr 4 compatibility issue in construction of policy clauses in Hydra::PolicyAwareAccessControlsEnforcement.
+* Removed references to dictionaries that are not in the default solrconfig.
+* Config templates are now in active-fedora.
+* hydra-access-controls requires blacklight.
+* Upgrade guide removed -- see wiki for upgrade notes.
+* Added .yardopts so that rdoc.info generates correct API documentation.
+* active-fedora upgraded to 6.1.
+
+h3. 6.0.0 (2013-03-28)
+* Added a jetty generator
+  If you want to install a version of jetty on your local machine to develop you project,
+  you can now do: 'rails generate hydra:jetty'
+
+* Using new solr schema
+  The new solr schema is written to be a more efficient (smaller document size) and easier to configure
+  in your OmDatastream or RDFDatastreams. 
+
+  You need to put in place the new schema.xml and solrconfig.xml.  Then restart solr and reindex using:
+  'ActiveFedora::Base.reindex_everything'
+
+  You're going to want to search your project to make sure you don't have any fields coded like: *_t or *_s 
+  These field names have changed to *_tesim and *_ssim respectively.  
+
+  Finally change your config/initializer/hydra_config.rb to look something like this:
+  https://github.com/projecthydra/hydra-head/blob/master/hydra-core/lib/generators/hydra/templates/config/initializers/hydra_config.rb
+
+
+  For more information about the new index see the Solrizer 3.0.0 docs:
+  https://github.com/projecthydra/hydra-head/wiki/Solr-Schema
+  https://github.com/projecthydra/solrizer/blob/master/README.textile
+
+
+* Added a Hydra::Controllers::DownloadBehavior which allows you to easily create 
+  a controller to serve the content of datastreams.  
+
+  class DownloadsController < ApplicationController
+    include Hydra::Controller::DownloadBehavior
+  end
+
+  then in config/routes.rb add ```resources :downloads```
+
+  then you can do a GET /downloads/{pid}?datastream_id=thumbnail  to get the thumbnail datastream
+  
+  By default this allows any user with read access to the object identified by pid to download any
+  of the datatreams.  If you want to control which datastreams a user has access to, overwrite the
+  can_download? method.
+  
+  This example allows anyone to download a 'thumbnail' datastream:
+
+  def can_download?
+    datastream.dsid == 'thumbnail'
+  end 
+
+
+h3. 5.4.0
+* Hydra::Ability should use a separate cache for each permission document
+* Fixed bug with policy access enforcement which occurs when you select a facet.
+* Fixed logging typo
+* Hydra::User now has a groups method. Use this instead of RoleMapper.
+
+h3. 5.3.0
+* add Hydra::ModelMethods.add_file
+* Don't generate solr_mappings.yml by default
+
+h3. 5.2.0
+* Custom abilities (cancan) via ability_logic_chain
+* Refactor upload behavior so that add_posted_blob_to_asset() isn't tightly coupled to Rack::Multipart::UploadedFile
+
+h3. 5.1.0
+* Bump to AF ~> 5.3
+
+h3. 5.0.0
+* We no longer require the hydra-file-access stuff by default, add "gem 'hydra-file-access'" if you want to continue to use it.
+* Upgrade to active-fedora 5.0 (you must add :index_as=>[:searchable] to models you want to index in solr)
+
+h3. 4.1.1
+* Fixed solr gated access query so that it doesn't keep appending 'registered' group
+* Moved user into hydra-access-controls, bump hydra-access-controls to 0.0.5
+
+h3. 4.1.0
+* Add AccessControlsEnforcement to AssetsController
+* Upgrade to active fedora ~>4.1
+* Upgrade to solrizer-fedora 2.1.0
+* Upgrade to blacklight ~> 3.4 
+* Improved access controls api
+* HYDRA-817 allow overriding of where we redirect_to, so that nested routes will work
+* Extracted hydra-mods and hydra-access-controls
+* Deprecation fest in preparation for 5.0
+* HYDRA-822 Move GlobalConfig into Hydra. It was removed from Blacklight.
+* HYDRA-831 apply_depositor_metadata should not overwrite existing user permissions
+* HYDRA-832 depositor should apply depositor metadata if the properties datastream exists
+* Fix up layout to better match blacklight.
+
+Note about deprecations:  We encourage the implementer to create their own controllers
+for CRUD operations and use standard Rails forms rather than using the AssetsController 
+and the AssetsControllerHelpers. In the 5.0 series these capabilites will be removed from
+HydraHead.  If you want to continue using these modules, you should copy the appropriate 
+files from this release into your local Hydra application. Further simplified examples 
+of this approach will be forthcoming. Until then, scholarsphere is a great exemplar.
+
+h3. 4.0.0
+* Upgrade to active fedora 4.0.0
+* Upgrade to blacklight 3.3.0 
+* Removed railtie to configure active-fedora
+* Register solr happens automatically
+* HYDRA-610 Using CanCan gem for authorization
+* Compatibility with Rails 3.2
+* Compatibility with Ruby 1.9.3
+
+h3. 3.3.0
+* HYDRA-737: fixes to work with Ruby Enterprise Edition 2011.12 and ruby-1.8.7-p357.
+* Update ActiveFedora to 3.3.0
+* Separating Hydra::Controller from Hydra::UI::Controller
+
+h3. 3.2.3
+* HYDRA-736: hydra-head should not define a rake task called 'spec'
+
+h3. 3.2.2
+* Update to ActiveFedora 3.2.2 to fix severe error
+* HYDRA-661: deprecated tasks and made them call AF repo tasks
+
+h3. 3.2.1
+* SubmissionWorkflow was not being required
+* Removed JettyCleaner (broken and unused)
+
+h3. 3.2.0
+* Update to Blacklight 3.1.2
+* Update to ActiveFedora 3.2.0
+* Update to solrizer-fedora 1.2.2
+* Remove calls to has_relationship 
+* File assets no longer check collection_member relationship (for container)
+
+h3. 3.1.5
+* Update to ActiveFedora 3.1.4
+* Update to solrizer-fedora 1.2.0
+* Fix problems where Datastreamr#attributes["mimeType"] was being called (changed to Datastream#mimeType)
+
+
+h3. 3.1.4
+* Removed unnecessary require of jettywrapper
+
+h3. 3.1.3
+* Make FileAssetController easily overridden
+* Update hydra-jetty, to support test and development fedora
+
+h3. 3.1.2
+* Make AssetController easily overridden
+
+
+h3. 3.1.1
+* Selected facet was not html_safe
+* document_list was attempting to call Mash#get, when sorting by object_type_facet
+* Don't issue two notice messages when saving document.
+
+
+h3. 3.1.0
+* Updated to ActiveFedora 3.1.1
+* Update rake tasks to leverage jettywrapper
+* Don't fork processes to run tests
+* Refactor helpers, so that applications can easily override them
+* Remove Djatoka support
+* Fixed login error messages
+* Fixed documentation rake task
+
+h3. 3.0.1
+
+* generator has the correct solr config files
+* reverted back to using object_type_facet for "Format" facet.  This is instead of using active_fedora_model_s, which made some cucumber tests unstable because active_fedora_model_s is populated inconsistently by ActiveFedora (really we should deprecate that solr field)
+
+h2. 3.0.0: Upgrade to Rails 3
+
+h3. 0.0.1
+
+Pulled plugin code from Hydrus 
+* Javascript disabled, progressive enhancement set up
+* Better Cucumber Coverage
+
+h3. 0.0.0
